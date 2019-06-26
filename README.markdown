@@ -16,8 +16,8 @@ Use of this project requires that [Graphviz](http://www.graphviz.org) is install
 | platform | directions |
 |----------|------------|
 | Linux | install `graphviz` using your package manager |
-| OS X | use `brew install graphiz` or [download the installer](http://www.graphviz.org/Download_macos.php) |
-| Windows | [download the installer](http://www.graphviz.org/Download_windows.php) |
+| OS X | use `brew install graphiz` if you use Homebrew, or `sudo port install graphviz` if you use MacPorts |
+| Windows | [download the installer](https://graphviz.gitlab.io/_pages/Download/Download_windows.html) |
 
 There are two namespaces, `rhizome.dot` and `rhizome.viz`.  The former will take a graph and return a string representation of a Graphviz dot file, the latter takes graphs and renders or displays them.  In practice, you should only need to use `rhizome.viz`.
 
@@ -37,9 +37,9 @@ These can be followed by zero or more of the following keyword arguments:
 | `:cluster->parent` | takes a cluster and returns which cluster, if any, it is contained within |
 | `:cluster->descriptor` | takes a cluster and returns a map of attributes onto values describing how the cluster should be rendered |
 
-The rendering attributes described by `:node->descriptor`, `:edge->descriptor`, `:cluster->descriptor`, and `:options` are described in detail [here](http://www.graphviz.org/content/attrs).  String and keyword values are interchangeable.
+The rendering attributes described by `:node->descriptor`, `:edge->descriptor`, `:cluster->descriptor`, and `:options` are described in detail [here](http://www.graphviz.org/content/attrs)).  String and keyword values are interchangeable.
 
-The most commonly-used attributes are `label`, which describes the text overlaid on a node, edge, or cluster, and `shape`, the options for which are described [here](http://www.graphviz.org/content/node-shapes).  For the `:options`, it's sometimes useful to adjust the `dpi`, which controls the size of the image.
+The most commonly-used attributes are `label`, which describes the text overlaid on a node, edge, or cluster, and `shape`, the options for which are described [here](https://graphviz.gitlab.io/_pages/doc/info/shapes.html).  For the `:options`, it's sometimes useful to adjust the `dpi`, which controls the size of the image.
 
 An example:
 
