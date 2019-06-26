@@ -37,7 +37,7 @@ These can be followed by zero or more of the following keyword arguments:
 | `:cluster->parent` | takes a cluster and returns which cluster, if any, it is contained within |
 | `:cluster->descriptor` | takes a cluster and returns a map of attributes onto values describing how the cluster should be rendered |
 
-The rendering attributes described by `:node->descriptor`, `:edge->descriptor`, `:cluster->descriptor`, and `:options` are described in detail [here](http://www.graphviz.org/content/attrs)).  String and keyword values are interchangeable.
+The rendering attributes described by `:node->descriptor`, `:edge->descriptor`, `:cluster->descriptor`, and `:options` are described in detail [here](https://graphviz.gitlab.io/_pages/doc/info/attrs.html).  String and keyword values are interchangeable.
 
 The most commonly-used attributes are `label`, which describes the text overlaid on a node, edge, or cluster, and `shape`, the options for which are described [here](https://graphviz.gitlab.io/_pages/doc/info/shapes.html).  For the `:options`, it's sometimes useful to adjust the `dpi`, which controls the size of the image.
 
