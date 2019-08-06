@@ -7,7 +7,7 @@ Rhizome is a library for visualizing graph and tree structures.
 To include in your project, add this to your `project.clj`:
 
 ```clj
-[rhizome "0.2.9"]
+[clojusc/rhizome "0.3.0-SNAPSHOT"]
 ```
 
 
@@ -44,7 +44,8 @@ The most commonly-used attributes are `label`, which describes the text overlaid
 An example:
 
 ```clj
-> (use 'rhizome.viz)
+> (require '[rhizome.viz :refer :all)
+> (require '[rhizome.img :refer :all)
 nil
 > (def g
     {:a [:b :c]
@@ -95,5 +96,7 @@ If the value for `label` is not a string, typically it will be displayed as a st
 ## License
 
 Copyright © 2013 Zachary Tellman
+
+Copyright © 2019 Clojure-Aided Enrichment Center
 
 Distributed under the [MIT License](http://opensource.org/licenses/MIT)

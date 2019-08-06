@@ -12,4 +12,13 @@
     :dev {
       :dependencies [
         [org.clojure/clojure "1.10.1"]
-        [codox-md "0.2.0" :exclusions [org.clojure/clojure]]]}})
+        [codox-md "0.2.0" :exclusions [org.clojure/clojure]]]}
+    :ubercompile {
+      :aot :all}}
+  :aliases {
+    "ubercompile" ["with-profile" "+ubercompile" "compile"]
+    "build" ["do"
+      ["clean"]
+      ["ubercompile"]
+      ["clean"]
+      ["uberjar"]]})
