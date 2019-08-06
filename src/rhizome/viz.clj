@@ -11,6 +11,18 @@
    (javax.swing AbstractAction JComponent JFrame JLabel JScrollPane ImageIcon KeyStroke)
    (javax.script ScriptEngineManager)))
 
+;;; Backwards compatibility
+
+(def dot->image img/dot->image)
+(def dot->svg img/dot->svg)
+(def save-image img/save-image)
+(def graph->image img/graph->image)
+(def graph->svg img/graph->svg)
+(def save-graph img/save-graph)
+(def tree->image img/tree->image)
+(def tree->svg img/tree->svg)
+(def save-tree img/save-tree)
+
 (defn headless? []
   (= "true" (System/getProperty "java.awt.headless")))
 
