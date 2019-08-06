@@ -83,8 +83,7 @@
   (when-let [applescript (.getEngineByName (ScriptEngineManager.) "AppleScript")]
     (try
       (.eval applescript "tell me to activate")
-      (catch Throwable e
-        ))))
+      (catch Throwable e))))
 
 (defn view-image
   "Takes an `image`, and displays it in a window.  If `frame` is not specified,
@@ -102,6 +101,15 @@
   "Takes a graph descriptor in the style of `graph->dot`, and displays a
   rendered image."
   (comp view-image img/dot->image dot/graph->dot))
+
+(def view-circo (comp view-image #(img/dot->image % {:layout "circo"}) dot/graph->dot))
+(def view-dot (comp view-image #(img/dot->image % {:layout "dot"}) dot/graph->dot))
+(def view-fdp (comp view-image #(img/dot->image % {:layout "fdp"}) dot/graph->dot))
+(def view-neato (comp view-image #(img/dot->image % {:layout "neato"}) dot/graph->dot))
+(def view-osage (comp view-image #(img/dot->image % {:layout "osage"}) dot/graph->dot))
+(def view-patchwork (comp view-image #(img/dot->image % {:layout "patchwork"}) dot/graph->dot))
+(def view-sfdp (comp view-image #(img/dot->image % {:layout "sfdp"}) dot/graph->dot))
+(def view-twopi (comp view-image #(img/dot->image % {:layout "twopi"}) dot/graph->dot))
 
 (def view-tree
   "Takes a tree descriptor in the style of `tree->dot`, and displays a rendered

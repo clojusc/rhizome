@@ -19,12 +19,17 @@
         (str/split-lines s))
       (repeat "\n"))))
 
+(defn- get-layout
+  [opts]
+  (str "-K" (or (:layout opts) "dot")))
+
 (defn dot->image
   "Takes a string containing a GraphViz dot file, and renders it to an image.
   This requires that GraphViz is installed on the local machine."
-  [s]
-  (let [{:keys [out err]} (try
-                            (sh/sh "dot" "-Tpng" :in s :out-enc :bytes)
+  [s & [opts]]
+  (let [layout (get-layout opts)
+        {:keys [out err]} (try
+                            (sh/sh "dot" "-Tpng" layout :in s :out-enc :bytes)
                             (catch java.io.IOException e
                               (try
                                 (sh/sh "dot" "-v")
@@ -41,8 +46,9 @@
   "Takes a string containing a GraphViz dot file, and returns a string
   containing SVG. This requires that GraphViz is installed on the local
   machine."
-  [s]
-  (let [{:keys [out err]} (sh/sh "dot" "-Tsvg" :in s)]
+  [s & [opts]]
+  (let [layout (get-layout opts)
+        {:keys [out err]} (sh/sh "dot" "-Tsvg" layout :in s)]
     (or
       out
       (throw (IllegalArgumentException. ^String (format-error s err))))))
@@ -61,6 +67,15 @@
   rendered image."
   (comp dot->image dot/graph->dot))
 
+(def circo->image (comp #(dot->image % {:layout "circo"}) dot/graph->dot))
+(def dot->image (comp #(dot->image % {:layout "dot"}) dot/graph->dot))
+(def fdp->image (comp #(dot->image % {:layout "fdp"}) dot/graph->dot))
+(def neato->image (comp #(dot->image % {:layout "neato"}) dot/graph->dot))
+(def osage->image (comp #(dot->image % {:layout "osage"}) dot/graph->dot))
+(def patchwork->image (comp #(dot->image % {:layout "patchwork"}) dot/graph->dot))
+(def sfdp->image (comp #(dot->image % {:layout "sfdp"}) dot/graph->dot))
+(def twopi->image (comp #(dot->image % {:layout "twopi"}) dot/graph->dot))
+
 (def graph->svg
   "Takes a graph descriptor in the style of `graph->dot`, and returns SVG."
   (comp dot->svg
@@ -73,8 +88,8 @@
   to disk."
   [nodes adjacent & {:keys [filename] :as options}]
   (-> (apply dot/graph->dot nodes adjacent (apply concat options))
-    dot->image
-    (save-image filename)))
+      dot->image
+      (save-image filename)))
 
 (def tree->image
   "Takes a tree descriptor in the style of `tree->dot`, and returns a rendered
@@ -86,9 +101,9 @@
   (comp dot->svg dot/tree->dot))
 
 (defn save-tree
-  "Takes a graph descriptor in the style of `graph->dot`, and saves the image
+  "Takes a graph descriptor in the style of `tree->dot`, and saves the image
   to disk."
   [branch? children root & {:keys [filename] :as options}]
   (-> (apply dot/tree->dot branch? children root (apply concat options))
-    dot->image
-    (save-image filename)))
+      dot->image
+      (save-image filename)))

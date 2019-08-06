@@ -74,10 +74,10 @@
   (cond
     (sequential? label)
     (->> label
-      (map #(str "{ " (-> % format-label unwrap-literal) " }"))
-      (interpose " | ")
-      (apply str)
-      ->literal)
+         (map #(str "{ " (-> % format-label unwrap-literal) " }"))
+         (interpose " | ")
+         (apply str)
+         ->literal)
 
     (string? label)
     label
@@ -187,27 +187,27 @@
            ;; graph[...]
            "graph["
            (-> (merge default-options options)
-             (update-in [:fontname] #(or % (when subgraph? "Monospace")))
-             (assoc :vertical? vertical?)
-             (dissoc :edge :node)
-             translate-options
-             (format-options ", "))
+               (update-in [:fontname] #(or % (when subgraph? "Monospace")))
+               (assoc :vertical? vertical?)
+               (dissoc :edge :node)
+               translate-options
+               (format-options ", "))
            "]\n"
 
            ;; node[...]
            "node["
            (-> node-options
-             (update-in [:fontname] #(or % "Monospace"))
-             (translate-options)
-             (format-options ", "))
+               (update-in [:fontname] #(or % "Monospace"))
+               (translate-options)
+               (format-options ", "))
            "]\n"
 
            ;; edge[...]
            "edge["
            (-> edge-options
-             (update-in [:fontname] #(or % "Monospace"))
-             (translate-options)
-             (format-options ", "))
+               (update-in [:fontname] #(or % "Monospace"))
+               (translate-options)
+               (format-options ", "))
            "]\n\n"))
 
        (interpose "\n"
@@ -215,64 +215,63 @@
 
            ;; nodes
            (->> nodes
-             (remove #(not= current-cluster (node->cluster %)))
-             (map
-               #(format-node (node->id %)
-                  (merge
-                    default-node-options
-                    (node->descriptor %)))))
+               (remove #(not= current-cluster (node->cluster %)))
+               (map
+                 #(format-node (node->id %)
+                    (merge
+                      default-node-options
+                      (node->descriptor %)))))
 
            ;; clusters
            (->> cluster->nodes
-             keys
-             (remove #(not= current-cluster (cluster->parent %)))
-             (map
-               #(apply graph->dot
-                  nodes
-                  adjacent
-                  (apply concat
-                    (assoc graph-descriptor
-                      ::cluster %
-                      :options (cluster->descriptor %))))))
+                keys
+                (remove #(not= current-cluster (cluster->parent %)))
+                (map
+                  #(apply graph->dot
+                     nodes
+                     adjacent
+                     (apply concat
+                       (assoc graph-descriptor
+                         ::cluster %
+                         :options (cluster->descriptor %))))))
 
            ;; edges
            (when-not subgraph?
 
              (->> nodes
+                  ;; filter out destinations that aren't in `nodes`, and differentiate
+                  ;; between nodes and clusters
+                  (mapcat
+                    (fn [node]
+                      (map vector
+                        (repeat node)
+                        (->> node
+                          adjacent
+                          (map
+                            #(cond
+                               (node? %) [:node %]
+                               (cluster? %) [:cluster %]
+                               :else nil))
+                          (remove nil?)))))
 
-               ;; filter out destinations that aren't in `nodes`, and differentiate
-               ;; between nodes and clusters
-               (mapcat
-                 (fn [node]
-                   (map vector
-                     (repeat node)
-                     (->> node
-                       adjacent
-                       (map
-                         #(cond
-                            (node? %) [:node %]
-                            (cluster? %) [:cluster %]
-                            :else nil))
-                       (remove nil?)))))
-
-               ;; format the edges
-               (map (fn [[a [type b]]]
-                      (let [descriptor (edge->descriptor a b)
-                            format #(format-edge
-                                      (node->id a)
-                                      (if (= :node type)
-                                        (node->id b)
-                                        (cluster->id b))
-                                      (merge
-                                        default-edge-options
-                                        {:directed? directed?}
-                                        %))]
-                        (if (vector? descriptor)
-                          (->> descriptor
-                            (map format)
-                            (interpose "\n")
-                            (apply str))
-                          (format descriptor)))))))
+                  ;; format the edges
+                  (map (fn [[a [type b]]]
+                         (let [descriptor (edge->descriptor a b)
+                               format #(format-edge
+                                         (node->id a)
+                                         (if (= :node type)
+                                           (node->id b)
+                                           (cluster->id b))
+                                         (merge
+                                           default-edge-options
+                                           {:directed? directed?}
+                                           %))]
+                           (if (vector? descriptor)
+                             (->> descriptor
+                                  (map format)
+                                  (interpose "\n")
+                                  (apply str))
+                             (format descriptor)))))))
 
            ["}\n"]))))))
 

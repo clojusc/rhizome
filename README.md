@@ -19,7 +19,7 @@ Use of this project requires that [Graphviz](http://www.graphviz.org) is install
 | OS X | use `brew install graphiz` if you use Homebrew, or `sudo port install graphviz` if you use MacPorts |
 | Windows | [download the installer](https://graphviz.gitlab.io/_pages/Download/Download_windows.html) |
 
-There are two namespaces, `rhizome.dot` and `rhizome.viz`.  The former will take a graph and return a string representation of a Graphviz dot file, the latter takes graphs and renders or displays them.  In practice, you should only need to use `rhizome.viz`.
+There are three namespaces, `rhizome.dot`, `rhizome.img`, and `rhizome.viz`.  The former will take a graph and return a string representation of a Graphviz dot file, the second takes graphs and renders them, the last one displays graphs.  In practice, you will likely be using one of the latter two.
 
 The core function is `rhizome.viz/view-graph`.  It takes two parameters: `nodes`, which is a list of nodes in the graph, and `adjacent`, which is a function that takes a node and returns adjacent nodes.  Nodes can be of any type you like, as long as the objects in `nodes` and the objects returned by `adjacent` are equivalent.
 
@@ -49,8 +49,8 @@ An example:
 nil
 > (def g
     {:a [:b :c]
-         :b [:c]
-         :c [:a]})
+     :b [:c]
+     :c [:a]})
 #'g
 > (view-graph (keys g) g
     :node->descriptor (fn [n] {:label n}))
@@ -92,6 +92,49 @@ If the value for `label` is not a string, typically it will be displayed as a st
 ![](/docs/tree_record_example.png)
 
 `rhizome.viz/graph->svg` can be used to render the graph as SVG.
+
+There are also `view-*` functions for each of Graphviz's layout engines. For
+example:
+
+```clj
+> (def t
+	  {1 [2 3 4 5 7 14 24 25]
+	   2 []
+	   3 [6 8 9 10 11 13 16 18 19 20 22]
+	   4 [23]
+	   5 []
+	   6 [15]
+	   7 [17]
+	   8 []
+	   9 []
+	   10 [12]
+	   11 []
+	   12 [21]
+	   13 []
+	   14 []
+	   15 [19]
+	   16 []
+	   17 []
+	   18 []
+	   19 []
+	   20 []
+	   21 []
+	   22 []
+	   23 []
+	   24 []
+	   25 []})
+> (viz/view-twopi (keys t) t
+    :directed? false
+    :node->descriptor (fn [n] {:label n}))
+```
+![](/docs/view_twopi_example.png)
+
+```clj
+> (viz/view-fdp (keys t) t
+    :directed? false
+    :node->descriptor (fn [n] {:label n}))
+```
+![](/docs/view_fdp_example.png)
 
 ## License
 
