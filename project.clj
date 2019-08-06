@@ -13,6 +13,10 @@
       :dependencies [
         [org.clojure/clojure "1.10.1"]
         [codox-md "0.2.0" :exclusions [org.clojure/clojure]]]}
+    :test {
+      :test-selectors {
+        :default (complement :integration)
+        :integration :integration}}
     :ubercompile {
       :aot :all}}
   :aliases {

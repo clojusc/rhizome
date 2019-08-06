@@ -1,4 +1,4 @@
-(ns rhizome.viz-test
+(ns ^:integration rhizome.viz-test
   (:use
     rhizome.viz
     clojure.test))
