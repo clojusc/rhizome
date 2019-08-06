@@ -1,4 +1,4 @@
-(defproject rhizome "0.3.0-SNAPSHOT"
+(defproject clojusc/rhizome "0.3.0-SNAPSHOT"
   :description "A simple way to visualize graphs"
   :license {
     :name "MIT License"
