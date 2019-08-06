@@ -51,8 +51,4 @@
   (view-tree list? seq t-1
     :node->descriptor (fn [n] {:label (when (vector? n) n)})
     :options {:rankdir :RL})
-  (Thread/sleep pause)
-
-
-
-  )
+  (Thread/sleep pause))

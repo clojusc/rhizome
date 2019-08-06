@@ -1,5 +1,6 @@
 (ns rhizome.dot
-  (:require [clojure.string :as str]))
+  (:require
+   [clojure.string :as str]))
 
 ;;;
 
@@ -129,17 +130,20 @@
   (*cluster->id* s))
 
 (defmacro ^:private with-gensyms
-  "Makes sure the mapping of node and clusters onto identifiers is consistent within its scope."
+  "Makes sure the mapping of node and clusters onto identifiers is consistent
+  within its scope."
   [& body]
   `(binding [*node->id* (or *node->id* (memoize (fn [_#] (gensym "node"))))
              *cluster->id* (or *cluster->id* (memoize (fn [_#] (gensym "cluster"))))]
      ~@body))
 
 (defn graph->dot
-  "Takes a description of a graph, and returns a string describing a GraphViz dot file.
+  "Takes a description of a graph, and returns a string describing a GraphViz
+  dot file.
 
-   Requires two fields: `nodes`, which is a list of the nodes in the graph, and `adjacent`, which
-   is a function that takes a node and returns a list of adjacent nodes."
+  Requires two fields: `nodes`, which is a list of the nodes in the graph, and
+  `adjacent`, which is a function that takes a node and returns a list of
+  adjacent nodes."
   [nodes adjacent
    & {:keys [directed?
              vertical?
@@ -273,8 +277,8 @@
            ["}\n"]))))))
 
 (defn tree->dot
-  "Like tree-seq, but returns a string containing a GraphViz dot file.  Additional options
-   mimic those in graph->dot."
+  "Like tree-seq, but returns a string containing a GraphViz dot file.
+  Additional options mimic those in graph->dot."
   [branch? children root
    & {:keys [vertical?
              node->descriptor
